@@ -84,7 +84,7 @@ export function StockDetailView({ stock, groups = [], onUpdate, onDelete }: Stoc
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 bg-zinc-200 border border-zinc-200 gap-px">
           {[
             { label: "보유 수량", value: `${stock.remainingQuantity.toLocaleString()} 주` },
-            { label: "평균 단가", value: `${(stock.totalBuyQuantity > 0 ? Math.round(stock.totalBuyAmount / stock.totalBuyQuantity) : 0).toLocaleString()}원` },
+            { label: "평균 단가", value: `${Math.round(stock.avgBuyPrice || 0).toLocaleString()}원` },
             { label: "현재가", value: `${(stock.currentPrice || 0).toLocaleString()}원` },
             { label: "수익률", value: `${(stock.unrealizedProfitPercentage || 0).toFixed(2)}%`, isProfit: isUnrealizedProfit }
           ].map((item, i) => (

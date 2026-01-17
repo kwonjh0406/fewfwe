@@ -45,6 +45,8 @@ export interface StockWithTransactions extends Stock {
   currentValue?: number
   unrealizedProfit?: number // 평가 수익 (보유 중인 것)
   unrealizedProfitPercentage?: number
+  avgBuyPrice?: number
+  totalAllocatedCost?: number
   totalProfit?: number // 실현 + 평가 수익
   totalProfitPercentage?: number
 }

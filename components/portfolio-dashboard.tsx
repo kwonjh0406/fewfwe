@@ -40,42 +40,63 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const calculateStockMetrics = (stock: Stock, transactions: Transaction[], currentPrice?: number): StockWithTransactions => {
+    let currentQuantity = 0
+    let avgBuyPrice = 0
+    let totalRealizedProfit = 0
+    let costOfSold = 0
+
     let totalBuyQuantity = 0
     let totalBuyAmount = 0
     let totalSellQuantity = 0
     let totalSellAmount = 0
 
-    for (const t of transactions) {
+    // Ensure transactions are sorted chronologically
+    const sortedTransactions = [...transactions].sort((a, b) =>
+      new Date(a.transaction_date).getTime() - new Date(b.transaction_date).getTime()
+    )
+
+    for (const t of sortedTransactions) {
       const amount = t.quantity * t.price
       if (t.type === "buy") {
+        const totalCostBasis = (currentQuantity * avgBuyPrice) + amount
+        currentQuantity += t.quantity
+        avgBuyPrice = currentQuantity > 0 ? totalCostBasis / currentQuantity : 0
+
         totalBuyQuantity += t.quantity
         totalBuyAmount += amount
       } else {
+        // Realized profit for this transaction
+        const profit = (t.price - avgBuyPrice) * t.quantity
+        totalRealizedProfit += profit
+        costOfSold += (avgBuyPrice * t.quantity)
+
+        currentQuantity -= t.quantity
         totalSellQuantity += t.quantity
         totalSellAmount += amount
+
+        if (currentQuantity <= 0) {
+          currentQuantity = 0
+          avgBuyPrice = 0
+        }
       }
     }
 
-    const remainingQuantity = totalBuyQuantity - totalSellQuantity
-    const avgBuyPrice = totalBuyQuantity > 0 ? totalBuyAmount / totalBuyQuantity : 0
-    const costOfSold = totalSellQuantity * avgBuyPrice
-    const realizedProfit = totalSellAmount - costOfSold
-    const profitPercentage = costOfSold > 0 ? (realizedProfit / costOfSold) * 100 : 0
-
+    const remainingQuantity = currentQuantity
     let unrealizedProfit = 0
     let unrealizedProfitPercentage = 0
     let currentValue = 0
 
     if (currentPrice && remainingQuantity > 0) {
       currentValue = remainingQuantity * currentPrice
-      const costOfRemaining = remainingQuantity * avgBuyPrice
-      unrealizedProfit = currentValue - costOfRemaining
-      unrealizedProfitPercentage = costOfRemaining > 0 ? (unrealizedProfit / costOfRemaining) * 100 : 0
+      const costBasisOfRemaining = remainingQuantity * avgBuyPrice
+      unrealizedProfit = currentValue - costBasisOfRemaining
+      unrealizedProfitPercentage = costBasisOfRemaining > 0 ? (unrealizedProfit / costBasisOfRemaining) * 100 : 0
     }
 
-    const totalProfit = realizedProfit + unrealizedProfit
-    const totalCost = costOfSold + (remainingQuantity * avgBuyPrice)
-    const totalProfitPercentage = totalCost > 0 ? (totalProfit / totalCost) * 100 : 0
+    const totalProfit = totalRealizedProfit + unrealizedProfit
+    const totalAllocatedCost = costOfSold + (remainingQuantity * avgBuyPrice)
+    const totalProfitPercentage = totalAllocatedCost > 0 ? (totalProfit / totalAllocatedCost) * 100 : 0
+    const profitPercentage = costOfSold > 0 ? (totalRealizedProfit / costOfSold) * 100 : 0
 
     return {
       ...stock,
@@ -85,12 +106,14 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
       totalSellQuantity,
       totalSellAmount: Math.round(totalSellAmount),
       remainingQuantity,
-      realizedProfit: Math.round(realizedProfit),
+      realizedProfit: Math.round(totalRealizedProfit),
       profitPercentage,
       currentPrice,
       currentValue: Math.round(currentValue),
       unrealizedProfit: Math.round(unrealizedProfit),
       unrealizedProfitPercentage,
+      avgBuyPrice,
+      totalAllocatedCost,
       totalProfit: Math.round(totalProfit),
       totalProfitPercentage
     }
@@ -181,17 +204,7 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
 
         setGroupedStocks(grouped)
 
-        const totalCostOfSold = stocksWithTransactions.reduce((acc, s) => {
-          const avgBuyPrice = s.totalBuyQuantity > 0 ? s.totalBuyAmount / s.totalBuyQuantity : 0
-          return acc + s.totalSellQuantity * avgBuyPrice
-        }, 0)
-
-        const totalCostOfHeld = stocksWithTransactions.reduce((acc, s) => {
-          const avgBuyPrice = s.totalBuyQuantity > 0 ? s.totalBuyAmount / s.totalBuyQuantity : 0
-          return acc + s.remainingQuantity * avgBuyPrice
-        }, 0)
-
-        const totalInvested = totalCostOfSold + totalCostOfHeld
+        const totalInvested = stocksWithTransactions.reduce((acc, s) => acc + (s.totalAllocatedCost || 0), 0)
         const portfolioProfitPercentage = totalInvested > 0 ? (totalProfit / totalInvested) * 100 : 0
 
         setSummary({
