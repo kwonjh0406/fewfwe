@@ -54,7 +54,7 @@ export async function getStockPrices(symbols: string[]) {
     // 2. Try Yahoo Finance
     try {
         if (yahooSymbols.length > 0) {
-            const results = await yahooFinance.quote(yahooSymbols, { validateResult: false })
+            const results: any = await yahooFinance.quote(yahooSymbols, { validateResult: false })
             if (Array.isArray(results)) {
                 results.forEach((quote: any) => {
                     if (quote.symbol && quote.regularMarketPrice) {
@@ -86,7 +86,7 @@ export async function getStockPrices(symbols: string[]) {
             } else {
                 // Try fetching Yahoo one-by-one as last resort
                 try {
-                    const quote = await yahooFinance.quote(symbol)
+                    const quote: any = await yahooFinance.quote(symbol)
                     if (quote.regularMarketPrice) {
                         prices[symbol] = quote.regularMarketPrice
                     }
