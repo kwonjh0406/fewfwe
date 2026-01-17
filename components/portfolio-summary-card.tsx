@@ -14,8 +14,8 @@ export function PortfolioSummaryCard({ summary }: PortfolioSummaryCardProps) {
   const isRealizedProfit = summary.totalRealizedProfit >= 0
 
   return (
-    <div className="grid gap-px bg-zinc-200 border border-zinc-200 rounded-none overflow-hidden md:grid-cols-2 lg:grid-cols-4">
-      <div className="bg-white p-6 lg:p-8 flex flex-col gap-6">
+    <div className="grid gap-px bg-zinc-200 border border-zinc-200 rounded-none overflow-hidden sm:grid-cols-2 xl:grid-cols-4">
+      <div className="bg-white p-5 lg:p-8 flex flex-col gap-4 lg:gap-6">
         <div className="text-[14px] font-black text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
           <BarChart3 className="h-4 w-4" />
           총 손익
@@ -37,7 +37,7 @@ export function PortfolioSummaryCard({ summary }: PortfolioSummaryCardProps) {
         </div>
       </div>
 
-      <div className="bg-white p-6 lg:p-8 flex flex-col gap-6">
+      <div className="bg-white p-5 lg:p-8 flex flex-col gap-4 lg:gap-6">
         <div className="text-[14px] font-black text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
           <Wallet className="h-4 w-4" />
           미실현 손익
@@ -53,7 +53,7 @@ export function PortfolioSummaryCard({ summary }: PortfolioSummaryCardProps) {
         </div>
       </div>
 
-      <div className="bg-white p-6 lg:p-8 flex flex-col gap-6">
+      <div className="bg-white p-5 lg:p-8 flex flex-col gap-4 lg:gap-6">
         <div className="text-[14px] font-black text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
           <ReceiptText className="h-4 w-4" />
           실현 손익
@@ -69,7 +69,7 @@ export function PortfolioSummaryCard({ summary }: PortfolioSummaryCardProps) {
         </div>
       </div>
 
-      <div className="bg-white p-6 lg:p-8 flex flex-col gap-6">
+      <div className="bg-white p-5 lg:p-8 flex flex-col gap-4 lg:gap-6">
         <div className="text-[14px] font-black text-zinc-400 uppercase tracking-[0.2em] flex items-center gap-2">
           <Info className="h-4 w-4" />
           거래 규모

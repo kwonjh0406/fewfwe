@@ -399,7 +399,7 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
         </header>
 
         <ScrollArea className="flex-1">
-          <div className="px-6 py-8 lg:px-12 lg:py-16 w-full space-y-24 pb-48">
+          <div className="px-4 py-8 md:px-6 lg:px-8 xl:px-12 lg:py-12 w-full space-y-12 lg:space-y-24 pb-48">
             {selectedStockId ? (
               <div className="animate-in fade-in duration-200">
                 <StockDetailView
