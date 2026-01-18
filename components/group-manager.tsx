@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -67,7 +67,7 @@ export function GroupManager({ portfolioId, groups, onUpdate }: GroupManagerProp
                     <span>그룹 관리</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans overflow-hidden">
+            <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans bg-white">
                 <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100 flex-shrink-0">
                     <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900">그룹 관리</DialogTitle>
                     <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest">
@@ -75,7 +75,7 @@ export function GroupManager({ portfolioId, groups, onUpdate }: GroupManagerProp
                     </DialogDescription>
                 </DialogHeader>
 
-                <ScrollArea className="flex-1">
+                <div className="flex-1 overflow-y-auto overscroll-contain">
                     <div className="p-6 space-y-10 pb-10">
                         {/* Create New Group */}
                         <div className="space-y-4">
@@ -87,7 +87,7 @@ export function GroupManager({ portfolioId, groups, onUpdate }: GroupManagerProp
                                     value={newGroupName}
                                     onChange={(e) => setNewGroupName(e.target.value)}
                                     disabled={loading}
-                                    className="h-11 px-4 border-zinc-200 bg-white shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all placeholder:text-zinc-200"
+                                    className="h-11 px-4 border-zinc-200 bg-white shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-all placeholder:text-zinc-200"
                                 />
                                 <Button
                                     type="submit"
@@ -113,7 +113,7 @@ export function GroupManager({ portfolioId, groups, onUpdate }: GroupManagerProp
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                className="h-8 w-8 p-0 text-zinc-200 hover:text-rose-500 hover:bg-white bg-white rounded-none opacity-0 group-hover:opacity-100 transition-all flex-shrink-0"
+                                                className="h-8 w-8 p-0 text-zinc-300 hover:text-rose-500 hover:bg-white bg-white rounded-none transition-all flex-shrink-0"
                                                 onClick={() => handleDeleteGroup(group.id)}
                                             >
                                                 <Trash2 className="h-4 w-4" />
@@ -128,7 +128,7 @@ export function GroupManager({ portfolioId, groups, onUpdate }: GroupManagerProp
                             </div>
                         </div>
                     </div>
-                </ScrollArea>
+                </div>
             </DialogContent>
         </Dialog>
     )

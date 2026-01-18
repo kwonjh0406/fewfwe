@@ -124,7 +124,7 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
                 placeholder="E.G. AAPL, 005930.KS"
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value)}
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400 w-full"
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-colors placeholder:text-zinc-400 w-full"
               />
             </div>
 
@@ -136,7 +136,7 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400 w-full"
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-colors placeholder:text-zinc-400 w-full"
               />
             </div>
 

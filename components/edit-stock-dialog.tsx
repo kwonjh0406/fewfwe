@@ -133,7 +133,7 @@ export function EditStockDialog({
                                 id="edit-symbol"
                                 value={symbol}
                                 onChange={(e) => setSymbol(e.target.value)}
-                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all uppercase w-full"
+                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-all uppercase w-full"
                             />
                         </div>
 
@@ -144,7 +144,7 @@ export function EditStockDialog({
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
-                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all w-full"
+                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-all w-full"
                             />
                         </div>
 
@@ -156,7 +156,7 @@ export function EditStockDialog({
                                 value={manualPrice}
                                 onChange={(e) => setManualPrice(e.target.value)}
                                 placeholder="API 가격 무시하고 직접 입력"
-                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all w-full"
+                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-all w-full"
                             />
                         </div>
 

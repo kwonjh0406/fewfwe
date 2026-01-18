@@ -122,7 +122,7 @@ export function EditTransactionDialog({ transaction, stockName, onTransactionUpd
                                 value={date}
                                 onChange={(e) => setDate(e.target.value)}
                                 required
-                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none w-full"
+                                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none w-full"
                             />
                         </div>
 
@@ -137,7 +137,7 @@ export function EditTransactionDialog({ transaction, stockName, onTransactionUpd
                                     onChange={(e) => setQuantity(e.target.value)}
                                     required
                                     min="1"
-                                    className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all w-full"
+                                    className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-all w-full"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -150,7 +150,7 @@ export function EditTransactionDialog({ transaction, stockName, onTransactionUpd
                                     onChange={(e) => setPrice(e.target.value)}
                                     required
                                     min="0"
-                                    className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all w-full"
+                                    className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none transition-all w-full"
                                 />
                             </div>
                         </div>
