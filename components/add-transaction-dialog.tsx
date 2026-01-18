@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { Plus } from "lucide-react"
 import { getSupabaseBrowserClient } from "@/lib/client"
 
@@ -68,15 +68,15 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
           거래 내역 추가
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans overflow-hidden">
+      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans bg-white">
         <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100 flex-shrink-0">
           <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900 truncate">거래 기록 추가</DialogTitle>
           <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest truncate">
             {stockName} / 새로운 거래 기록을 입력합니다
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1">
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6 pb-10">
             <div className="space-y-3">
               <Label className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 종류</Label>
               <div className="grid grid-cols-2 gap-2">
@@ -119,7 +119,7 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   required
-                  className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all"
+                  className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -131,7 +131,7 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   required
-                  className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all"
+                  className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all w-full"
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
                 required
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none"
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none w-full"
               />
             </div>
 
@@ -158,7 +158,7 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
               </Button>
             </DialogFooter>
           </form>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   )

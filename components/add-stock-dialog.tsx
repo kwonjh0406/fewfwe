@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ScrollArea } from "@/components/ui/scroll-area"
+
 import { Plus } from "lucide-react"
 import { getSupabaseBrowserClient } from "@/lib/client"
 import type { Group } from "@/types/portfolio"
@@ -81,15 +81,15 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
           <span>종목 추가</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans overflow-hidden">
+      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans bg-white">
         <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100 flex-shrink-0">
           <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900 truncate">주식 종목 추가</DialogTitle>
           <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest truncate">
             포트폴리오에 새로운 자산을 추가합니다
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1">
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6 pb-10">
             <div className="space-y-3">
               <Label className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">그룹 선택</Label>
               {groups.length > 0 ? (
@@ -124,7 +124,7 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
                 placeholder="E.G. AAPL, 005930.KS"
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value)}
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400"
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400 w-full"
               />
             </div>
 
@@ -136,7 +136,7 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400"
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400 w-full"
               />
             </div>
 
@@ -150,7 +150,7 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
               </Button>
             </DialogFooter>
           </form>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   )
