@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { Edit2 } from "lucide-react"
+import { Edit2, Calendar as CalendarIcon } from "lucide-react"
 import { getSupabaseBrowserClient } from "@/lib/client"
 import type { Transaction } from "@/types/portfolio"
 
@@ -116,14 +116,17 @@ export function EditTransactionDialog({ transaction, stockName, onTransactionUpd
 
                         <div className="space-y-2">
                             <Label htmlFor="edit-date" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 날짜</Label>
-                            <Input
-                                id="edit-date"
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                required
-                                className="appearance-none block w-full min-w-0 h-11 px-3 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none bg-transparent"
-                            />
+                            <div className="relative">
+                                <Input
+                                    id="edit-date"
+                                    type="date"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    required
+                                    className="appearance-none cursor-pointer flex items-center w-full min-w-0 h-11 pl-3 pr-10 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none bg-transparent relative [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:inset-0"
+                                />
+                                <CalendarIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
