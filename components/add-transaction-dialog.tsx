@@ -144,7 +144,7 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
                 value={transactionDate}
                 onChange={(e) => setTransactionDate(e.target.value)}
                 required
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none w-full"
+                className="appearance-none block w-full min-w-0 h-11 px-3 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-base md:text-[14px] rounded-none bg-transparent"
               />
             </div>
 
