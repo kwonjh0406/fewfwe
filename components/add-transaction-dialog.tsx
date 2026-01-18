@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, ReceiptText } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Plus } from "lucide-react"
 import { getSupabaseBrowserClient } from "@/lib/client"
 
 interface AddTransactionDialogProps {
@@ -68,95 +68,97 @@ export function AddTransactionDialog({ stockId, stockName, onTransactionAdded }:
           거래 내역 추가
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[400px] border-zinc-200 rounded-none p-0 overflow-hidden shadow-none">
-        <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100">
-          <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900">거래 기록 추가</DialogTitle>
-          <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest">
+      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans overflow-hidden">
+        <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100 flex-shrink-0">
+          <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900 truncate">거래 기록 추가</DialogTitle>
+          <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest truncate">
             {stockName} / 새로운 거래 기록을 입력합니다
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="space-y-3">
-            <Label className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 종류</Label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setType("buy")}
-                className={cn(
-                  "h-11 px-4 border text-[13px] font-black transition-all uppercase tracking-tight flex items-center justify-center gap-2 rounded-none",
-                  type === "buy"
-                    ? "bg-zinc-50 border-zinc-400 text-emerald-500"
-                    : "bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-black"
-                )}
-              >
-                매수 (BUY)
-                {type === "buy" && <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />}
-              </button>
-              <button
-                type="button"
-                onClick={() => setType("sell")}
-                className={cn(
-                  "h-11 px-4 border text-[13px] font-black transition-all uppercase tracking-tight flex items-center justify-center gap-2 rounded-none",
-                  type === "sell"
-                    ? "bg-zinc-50 border-zinc-400 text-rose-500"
-                    : "bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-black"
-                )}
-              >
-                매도 (SELL)
-                {type === "sell" && <div className="w-1.5 h-1.5 bg-rose-500 rounded-full" />}
-              </button>
+        <ScrollArea className="flex-1">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="space-y-3">
+              <Label className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 종류</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setType("buy")}
+                  className={cn(
+                    "h-11 px-4 border text-[13px] font-black transition-all uppercase tracking-tight flex items-center justify-center gap-2 rounded-none",
+                    type === "buy"
+                      ? "bg-zinc-50 border-zinc-400 text-emerald-500"
+                      : "bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-black"
+                  )}
+                >
+                  매수 (BUY)
+                  {type === "buy" && <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setType("sell")}
+                  className={cn(
+                    "h-11 px-4 border text-[13px] font-black transition-all uppercase tracking-tight flex items-center justify-center gap-2 rounded-none",
+                    type === "sell"
+                      ? "bg-zinc-50 border-zinc-400 text-rose-500"
+                      : "bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-black"
+                  )}
+                >
+                  매도 (SELL)
+                  {type === "sell" && <div className="w-1.5 h-1.5 bg-rose-500 rounded-full" />}
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="quantity" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 수량</Label>
+                <Input
+                  id="quantity"
+                  type="number"
+                  placeholder="0"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
+                  required
+                  className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="price" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 단가 (원)</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  placeholder="0"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                  className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all"
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <Label htmlFor="quantity" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 수량</Label>
+              <Label htmlFor="transactionDate" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 날짜</Label>
               <Input
-                id="quantity"
-                type="number"
-                placeholder="0"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
+                id="transactionDate"
+                type="date"
+                value={transactionDate}
+                onChange={(e) => setTransactionDate(e.target.value)}
                 required
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all"
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="price" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 단가 (원)</Label>
-              <Input
-                id="price"
-                type="number"
-                placeholder="0"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
-                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-all"
-              />
-            </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="transactionDate" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">거래 날짜</Label>
-            <Input
-              id="transactionDate"
-              type="date"
-              value={transactionDate}
-              onChange={(e) => setTransactionDate(e.target.value)}
-              required
-              className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none"
-            />
-          </div>
-
-          <DialogFooter className="pt-4">
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full h-14 font-black bg-zinc-900 text-white border-none hover:bg-black transition-all shadow-none rounded-none uppercase tracking-widest text-[14px]"
-            >
-              {loading ? "기록 중..." : "거래 기록 추가 완료"}
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter className="pt-4">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full h-14 font-black bg-zinc-900 text-white border-none hover:bg-black transition-all shadow-none rounded-none uppercase tracking-widest text-[14px]"
+              >
+                {loading ? "기록 중..." : "거래 기록 추가 완료"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   )

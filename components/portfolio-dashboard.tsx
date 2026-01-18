@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { PortfolioSummaryCard } from "./portfolio-summary-card"
 import { StockDetailView } from "./stock-card"
 import { AddStockDialog } from "./add-stock-dialog"
@@ -38,6 +38,7 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [dbError, setDbError] = useState<string | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const scrollAreaRef = useRef<HTMLDivElement>(null)
 
   const calculateStockMetrics = (stock: Stock, transactions: Transaction[], currentPrice?: number): StockWithTransactions => {
     let currentQuantity = 0
@@ -228,6 +229,16 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
     fetchData()
   }, [fetchData])
 
+  // Reset scroll position when stock selection changes
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]')
+      if (viewport) {
+        viewport.scrollTop = 0
+      }
+    }
+  }, [selectedStockId])
+
   const deleteStock = async () => {
     if (!selectedStockId) return
     const stockName = stocks.find(s => s.id === selectedStockId)?.name
@@ -411,11 +422,12 @@ export function PortfolioDashboard({ portfolioId }: PortfolioDashboardProps) {
           )}
         </header>
 
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1" ref={scrollAreaRef}>
           <div className="px-4 py-8 md:px-6 lg:px-8 xl:px-12 lg:py-12 w-full space-y-12 lg:space-y-24 pb-48">
             {selectedStockId ? (
               <div className="animate-in fade-in duration-200">
                 <StockDetailView
+                  key={selectedStockId}
                   stock={stocks.find(s => s.id === selectedStockId)!}
                   groups={groups}
                   onUpdate={fetchData}

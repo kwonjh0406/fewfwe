@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -23,7 +22,8 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Plus, PlusSquare } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Plus } from "lucide-react"
 import { getSupabaseBrowserClient } from "@/lib/client"
 import type { Group } from "@/types/portfolio"
 
@@ -81,74 +81,76 @@ export function AddStockDialog({ portfolioId, groups, onStockAdded }: AddStockDi
           <span>종목 추가</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[400px] border-zinc-200 rounded-none p-0 overflow-hidden shadow-none font-sans">
-        <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100">
-          <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900">주식 종목 추가</DialogTitle>
-          <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest">
+      <DialogContent className="w-[calc(100vw-2rem)] sm:max-w-[400px] max-h-[85dvh] border-zinc-200 rounded-none p-0 flex flex-col shadow-none font-sans overflow-hidden">
+        <DialogHeader className="px-6 pt-10 pb-6 bg-white border-b border-zinc-100 flex-shrink-0">
+          <DialogTitle className="text-2xl font-black tracking-tighter uppercase text-zinc-900 truncate">주식 종목 추가</DialogTitle>
+          <DialogDescription className="text-[13px] text-zinc-400 font-black uppercase tracking-widest truncate">
             포트폴리오에 새로운 자산을 추가합니다
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="p-6 space-y-8">
-          <div className="space-y-4">
-            <Label className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">그룹 선택</Label>
-            {groups.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2">
-                {groups.map(g => (
-                  <button
-                    key={g.id}
-                    type="button"
-                    onClick={() => setGroupId(g.id)}
-                    className={cn(
-                      "h-12 px-4 border text-[13px] font-black transition-all uppercase tracking-tight text-left truncate flex items-center justify-between rounded-none",
-                      groupId === g.id
-                        ? "bg-zinc-50 border-zinc-400 text-black"
-                        : "bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-black"
-                    )}
-                  >
-                    {g.name}
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="p-4 bg-zinc-50 border border-dashed border-zinc-200 text-zinc-400 text-[13px] font-black uppercase tracking-widest text-center">
-                생성된 그룹이 없습니다
-              </div>
-            )}
-          </div>
+        <ScrollArea className="flex-1">
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="space-y-3">
+              <Label className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">그룹 선택</Label>
+              {groups.length > 0 ? (
+                <div className="grid grid-cols-2 gap-2">
+                  {groups.map(g => (
+                    <button
+                      key={g.id}
+                      type="button"
+                      onClick={() => setGroupId(g.id)}
+                      className={cn(
+                        "h-11 px-4 border text-[13px] font-black transition-all uppercase tracking-tight text-left truncate flex items-center justify-between rounded-none",
+                        groupId === g.id
+                          ? "bg-zinc-50 border-zinc-400 text-black"
+                          : "bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-black"
+                      )}
+                    >
+                      {g.name}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 bg-zinc-50 border border-dashed border-zinc-200 text-zinc-400 text-[13px] font-black uppercase tracking-widest text-center">
+                  생성된 그룹이 없습니다
+                </div>
+              )}
+            </div>
 
-          <div className="space-y-2.5">
-            <Label htmlFor="symbol" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">티커 심볼 (종목코드)</Label>
-            <Input
-              id="symbol"
-              placeholder="E.G. AAPL, 005930.KS"
-              value={symbol}
-              onChange={(e) => setSymbol(e.target.value)}
-              className="h-12 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400"
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="symbol" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">티커 심볼 (종목코드)</Label>
+              <Input
+                id="symbol"
+                placeholder="E.G. AAPL, 005930.KS"
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400"
+              />
+            </div>
 
-          <div className="space-y-2.5">
-            <Label htmlFor="name" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">자산 명칭</Label>
-            <Input
-              id="name"
-              placeholder="E.G. APPLE, SAMSUNG"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="h-12 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400"
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-[13px] font-black text-zinc-400 uppercase tracking-[0.2em] pl-0.5">자산 명칭</Label>
+              <Input
+                id="name"
+                placeholder="E.G. APPLE, SAMSUNG"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="h-11 px-4 border-zinc-200 shadow-none focus-visible:ring-0 focus-visible:border-zinc-400 font-black text-[14px] rounded-none transition-colors placeholder:text-zinc-400"
+              />
+            </div>
 
-          <DialogFooter className="pt-4 pb-2">
-            <Button
-              type="submit"
-              disabled={loading || groups.length === 0}
-              className="w-full h-14 font-black bg-zinc-900 text-white border-none hover:bg-black transition-all shadow-none rounded-none uppercase tracking-widest text-[14px]"
-            >
-              {loading ? "처리 중..." : "종목 추가 완료"}
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter className="pt-4">
+              <Button
+                type="submit"
+                disabled={loading || groups.length === 0}
+                className="w-full h-14 font-black bg-zinc-900 text-white border-none hover:bg-black transition-all shadow-none rounded-none uppercase tracking-widest text-[14px]"
+              >
+                {loading ? "처리 중..." : "종목 추가 완료"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   )

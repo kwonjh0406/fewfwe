@@ -1,10 +1,12 @@
 "use server"
 
-import yahooFinance from "yahoo-finance2"
+import YahooFinance from "yahoo-finance2"
+
+// Force instantiation as requested by the error message, and suppress the survey notice
+const yf = new YahooFinance({ suppressNotices: ['yahooSurvey'] })
 
 async function fetchNaverPrice(code: string): Promise<number | null> {
     try {
-        // Remove .KS or .KQ if present to get just the code
         const cleanCode = code.replace(".KS", "").replace(".KQ", "")
         if (!/^\d{6}$/.test(cleanCode)) return null
 
@@ -12,13 +14,10 @@ async function fetchNaverPrice(code: string): Promise<number | null> {
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
             },
-            next: { revalidate: 60 } // Cache for 60 seconds
+            next: { revalidate: 60 }
         })
 
         const html = await response.text()
-
-        // Regex to find the 'no_today' class which usually contains the current price in Naver Finance
-        // Structure: <p class="no_today"> ... <span class="blind">85,000</span> ... </p>
         const match = html.match(/<p class="no_today">[\s\S]*?<span class="blind">([\d,]+)<\/span>/)
 
         if (match && match[1]) {
@@ -38,10 +37,8 @@ export async function getStockPrices(symbols: string[]) {
     const yahooSymbols: string[] = []
     const naverCandidates: string[] = []
 
-    // 1. Classify symbols
     for (const symbol of symbols) {
         if (symbol.endsWith(".KS") || symbol.endsWith(".KQ") || /^\d{6}$/.test(symbol)) {
-            // Try Yahoo first for standard formatted, but keep track for fallback
             yahooSymbols.push(symbol)
             if (/^\d{6}$/.test(symbol) || symbol.endsWith(".KS") || symbol.endsWith(".KQ")) {
                 naverCandidates.push(symbol)
@@ -51,10 +48,9 @@ export async function getStockPrices(symbols: string[]) {
         }
     }
 
-    // 2. Try Yahoo Finance
     try {
         if (yahooSymbols.length > 0) {
-            const results: any = await yahooFinance.quote(yahooSymbols, { validateResult: false })
+            const results: any = await yf.quote(yahooSymbols)
             if (Array.isArray(results)) {
                 results.forEach((quote: any) => {
                     if (quote.symbol && quote.regularMarketPrice) {
@@ -72,26 +68,20 @@ export async function getStockPrices(symbols: string[]) {
         console.error("Yahoo Finance bulk fetch error:", e)
     }
 
-    // 3. Fallback / Naver Processing
-    // Check missing prices for potential Korean stocks
-    for (const symbol of symbols) {
-        // If price not found yet
-        if (!prices[symbol]) {
-            // If it looks like a KR stock
-            if (naverCandidates.includes(symbol) || /^\d{6}$/.test(symbol.replace(/\.K[SQ]/, ""))) {
-                const price = await fetchNaverPrice(symbol)
-                if (price) {
-                    prices[symbol] = price
-                }
-            } else {
-                // Try fetching Yahoo one-by-one as last resort
-                try {
-                    const quote: any = await yahooFinance.quote(symbol)
-                    if (quote.regularMarketPrice) {
-                        prices[symbol] = quote.regularMarketPrice
-                    }
-                } catch (ignore) { }
+    const remainingSymbols = symbols.filter(s => !prices[s])
+    for (const symbol of remainingSymbols) {
+        if (naverCandidates.includes(symbol) || /^\d{6}$/.test(symbol.replace(/\.K[SQ]/, ""))) {
+            const price = await fetchNaverPrice(symbol)
+            if (price) {
+                prices[symbol] = price
             }
+        } else {
+            try {
+                const quote: any = await yf.quote(symbol)
+                if (quote.regularMarketPrice) {
+                    prices[symbol] = quote.regularMarketPrice
+                }
+            } catch (ignore) { }
         }
     }
 
